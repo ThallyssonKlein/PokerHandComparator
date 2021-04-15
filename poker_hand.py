@@ -1,5 +1,5 @@
 from card import Card
-from .enum import Options
+from .enum import Result
 
 class PokerHand():
     __cards = []
@@ -188,15 +188,15 @@ class PokerHand():
 
         if not self.__definedHand and not definedHand:
             if winOrLoseHighestCard(self, other):
-                return Options.WIN.value
+                return Result.WIN.value
             else:
-                return Options.LOSS.value
+                return Result.LOSS.value
         elif not self.__definedHand and definedHand:
-            return Options.LOSS.value
+            return Result.LOSS.value
         elif self.__definedHand and not definedHand:
-            return Options.WIN.value
+            return Result.WIN.value
         else:
             if self.handTypeNumber > other.handTypeNumber:
-                return Options.WIN.value
+                return Result.WIN.value
             elif self.handTypeNumber < other.handTypeNumber
-                return Options.LOSS.value
+                return Result.LOSS.value

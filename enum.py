@@ -1,2 +1,2 @@
 from enum import Enum
-Options = Enum('Options', 'WIN LOSS SPLITS_THE_POT')
+Result = Enum('Options', 'WIN LOSS')
