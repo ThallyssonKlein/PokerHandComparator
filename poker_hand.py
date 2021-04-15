@@ -83,6 +83,18 @@ class PokerHand():
     def isOnePair(self):
         pass
 
+    def isFlush(self, hand):
+        cards = hand.getCards()
+        currentSuit = cards[0].cardSuit
+        for i in range(1, len(cards)):
+            if currentSuit != cards[i].cardSuit:
+                return False
+            currentSuit = cards[i].cardSuit
+        return True
+
+    def isHighCard(self, hand):
+        pass
+
     def defineHand(self, hand):
         if isRoyalFlush(hand):
             hand.handTypeNumber = 10
