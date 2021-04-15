@@ -1,5 +1,6 @@
 from card import Card
-from .enum import Result
+from custom_enum import Result
+
 
 class PokerHand():
     __cards = []
@@ -51,15 +52,15 @@ class PokerHand():
                     return True
         return False
 
-    def isThreeOfAKind(self):
+    def isThreeOfAKind(self, hand):
         cards = hand.getCards()
-        return ofAKind(cards, 3)
+        return self.ofAKind(cards, 3)
 
     def isFourOfAKind(self, hand):
         cards = hand.getCards()
-        return ofAKind(cards, 4)
+        return self.ofAKind(cards, 4)
 
-    def isTwoPair(self):
+    def isTwoPair(self, hand):
         cards = hand.getCards()
         firstPairValue = None
         for i in range(0, len(cards)):
@@ -94,7 +95,7 @@ class PokerHand():
                         return True
         return False
 
-    def isOnePair(self):
+    def isOnePair(self, hand):
         cards = hand.getCards()
         firstPairValue = None
         for i in range(0, len(cards)):
@@ -113,63 +114,48 @@ class PokerHand():
         return True
 
     def winOrLoseHighestCard(self, hand1, hand2):
-        switcher = {
-            '2': 2,
-            '3': 3,
-            '4': 4,
-            '5': 5,
-            '6': 6,
-            '7': 7,
-            '8': 8,
-            '9': 9,
-            'T': 10,
-            'J': 11,
-            'Q': 12,
-            'K': 13,
-            'A': 14
-        }
         valuesHandOne = []
         valuesHandTwo = []
 
         cards = hand1.getCards()
         for card in cards:
-            valuesHandOne.append(switcher.get(cards.cardValue))
-        
+            valuesHandOne.append(card.cardValue)
+
         cards = hand2.getCards()
         for card in cards:
-            valuesHandTwo.append(switcher.get(cards.cardValue))
-        
+            valuesHandTwo.append(card.cardValue)
+
         return max(valuesHandOne) > min(valuesHandTwo)
-    
+
     def defineHand(self, hand):
-        if isRoyalFlush(hand):
+        if self.isRoyalFlush(hand):
             hand.handTypeNumber = 10
             return True
-        elif isStraightFlush(hand):
+        elif self.isStraightFlush(hand):
             hand.handTypeNumber = 9
             return True
-        elif isFourOfAKind(hand):
+        elif self.isFourOfAKind(hand):
             hand.handTypeNumber = 8
             return True
-        elif isFullHouse(hand):
+        elif self.isFullHouse(hand):
             hand.handTypeNumber = 7
             return True
-        elif isFlush(hand):
+        elif self.isFlush(hand):
             hand.handTypeNumber = 6
             return True
-        elif isStraight(hand):
+        elif self.isStraight(hand):
             hand.handTypeNumber = 5
             return True
-        elif isThreeOfAKind(hand):
+        elif self.isThreeOfAKind(hand):
             hand.handTypeNumber = 4
             return True
-        elif isTwoPair(hand):
+        elif self.isTwoPair(hand):
             hand.handTypeNumber = 3
             return True
-        elif isOnePair(hand):
+        elif self.isOnePair(hand):
             hand.handTypeNumber = 2
             return True
-        
+
         return False
 
     def __init__(self, cardsStr):
@@ -181,22 +167,22 @@ class PokerHand():
         for card in cards:
             self.__cards.append(Card(value=card))
 
-        self.__definedHand = defineHand(self)
+        self.__definedHand = self.defineHand(self)
 
     def compare_with(self, other):
-        definedHand = definedHand(other)
+        definedHand = self.defineHand(other)
 
         if not self.__definedHand and not definedHand:
-            if winOrLoseHighestCard(self, other):
-                return Result.WIN.value
+            if self.winOrLoseHighestCard(self, other):
+                return Result.WIN
             else:
-                return Result.LOSS.value
+                return Result.LOSS
         elif not self.__definedHand and definedHand:
-            return Result.LOSS.value
+            return Result.LOSS
         elif self.__definedHand and not definedHand:
-            return Result.WIN.value
+            return Result.WIN
         else:
             if self.handTypeNumber > other.handTypeNumber:
-                return Result.WIN.value
-            elif self.handTypeNumber < other.handTypeNumber
-                return Result.LOSS.value
+                return Result.WIN
+            elif self.handTypeNumber < other.handTypeNumber:
+                return Result.LOSS
