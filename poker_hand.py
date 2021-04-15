@@ -1,11 +1,10 @@
 from card import Card
-from enum import Enum
-
+from .enum import Options
 
 class PokerHand():
     __cards = []
     handTypeNumber = 0
-    Options = Enum('Options', 'WIN LOSS SPLITS_THE_POT')
+    __definedHand = False
 
     def getCards(self):
         return self.__cards
@@ -113,16 +112,65 @@ class PokerHand():
             currentSuit = cards[i].cardSuit
         return True
 
-    def isHighCard(self, hand):
-        pass
+    def winOrLoseHighestCard(self, hand1, hand2):
+        switcher = {
+            '2': 2,
+            '3': 3,
+            '4': 4,
+            '5': 5,
+            '6': 6,
+            '7': 7,
+            '8': 8,
+            '9': 9,
+            'T': 10,
+            'J': 11,
+            'Q': 12,
+            'K': 13,
+            'A': 14
+        }
+        valuesHandOne = []
+        valuesHandTwo = []
 
+        cards = hand1.getCards()
+        for card in cards:
+            valuesHandOne.append(switcher.get(cards.cardValue))
+        
+        cards = hand2.getCards()
+        for card in cards:
+            valuesHandTwo.append(switcher.get(cards.cardValue))
+        
+        return max(valuesHandOne) > min(valuesHandTwo)
+    
     def defineHand(self, hand):
         if isRoyalFlush(hand):
             hand.handTypeNumber = 10
+            return True
         elif isStraightFlush(hand):
             hand.handTypeNumber = 9
-        elif isFullHouse(hand):
+            return True
+        elif isFourOfAKind(hand):
             hand.handTypeNumber = 8
+            return True
+        elif isFullHouse(hand):
+            hand.handTypeNumber = 7
+            return True
+        elif isFlush(hand):
+            hand.handTypeNumber = 6
+            return True
+        elif isStraight(hand):
+            hand.handTypeNumber = 5
+            return True
+        elif isThreeOfAKind(hand):
+            hand.handTypeNumber = 4
+            return True
+        elif isTwoPair(hand):
+            hand.handTypeNumber = 3
+            return True
+        elif isOnePair(hand):
+            hand.handTypeNumber = 2
+            return True
+        
+        return False
 
     def __init__(self, cardsStr):
         cards = cardsStr.split(' ')
@@ -133,7 +181,22 @@ class PokerHand():
         for card in cards:
             self.__cards.append(Card(value=card))
 
-        defineHand(self)
+        self.__definedHand = defineHand(self)
 
     def compare_with(self, other):
-        pass
+        definedHand = definedHand(other)
+
+        if not self.__definedHand and not definedHand:
+            if winOrLoseHighestCard(self, other):
+                return Options.WIN.value
+            else:
+                return Options.LOSS.value
+        elif not self.__definedHand and definedHand:
+            return Options.LOSS.value
+        elif self.__definedHand and not definedHand:
+            return Options.WIN.value
+        else:
+            if self.handTypeNumber > other.handTypeNumber:
+                return Options.WIN.value
+            elif self.handTypeNumber < other.handTypeNumber
+                return Options.LOSS.value
