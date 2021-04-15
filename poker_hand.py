@@ -42,19 +42,23 @@ class PokerHand():
                 return False
         return True
 
-    def isThreeOfAKind(self):
-        pass
-
-    def isFourOfAKind(self, hand):
-        cards = hand.getCards()
+    def ofAKind(self, cards, count):
         for i in range(0, len(cards)):
             iCount = 1
             for j in range(i + 1, len(cards)):
                 if cards[i].cardValue == cards[j].cardValue:
                     iCount += 1
-                if iCount == 4:
+                if iCount == count:
                     return True
         return False
+
+    def isThreeOfAKind(self):
+        cards = hand.getCards()
+        return ofAKind(cards, 3)
+
+    def isFourOfAKind(self, hand):
+        cards = hand.getCards()
+        return ofAKind(cards, 4)
 
     def isTwoPair(self):
         pass
