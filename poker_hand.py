@@ -1,7 +1,6 @@
 from card import Card
 from enum import Enum
 
-
 class PokerHand():
     __cards = []
     handTypeNumber = 0
@@ -62,9 +61,16 @@ class PokerHand():
     def isThreeOfAKind(self):
         pass
 
-    def isFourOfAKind(self):
-        pass
-
+    def isFourOfAKind(self, hand):
+        cards = hand.getCards()
+        for i in range(0, len(cards)):
+            iCount = 1
+            for j in range(i + 1, len(cards)):
+                if cards[i].cardValue == cards[j].cardValue:
+                    iCount += 1
+                if iCount == 4:
+                    return True
+        return False
     def isTwoPair(self):
         pass
 
@@ -75,3 +81,4 @@ class PokerHand():
         pass
 
     def compare_with(self, other):
+        pass
