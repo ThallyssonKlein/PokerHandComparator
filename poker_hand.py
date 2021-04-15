@@ -61,7 +61,18 @@ class PokerHand():
         return ofAKind(cards, 4)
 
     def isTwoPair(self):
-        pass
+        cards = hand.getCards()
+        firstPairValue = None
+        for i in range(0, len(cards)):
+            for j in range(1, len(cards)):
+                if cards[i].cardValue == cards[j].cardValue:
+                    firstPairValue = cards[i].cardValue
+
+        for i in range(0, len(cards)):
+            for j in range(1, len(cards)):
+                if cards[i].cardValue == cards[j].cardValue and cards[j].cardValue != firstPairValue:
+                    return True
+        return False
 
     def isFullHouse(self, hand):
         cards = hand.getCards()
