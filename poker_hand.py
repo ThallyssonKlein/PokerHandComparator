@@ -96,7 +96,13 @@ class PokerHand():
         return False
 
     def isOnePair(self):
-        pass
+        cards = hand.getCards()
+        firstPairValue = None
+        for i in range(0, len(cards)):
+            for j in range(1, len(cards)):
+                if cards[i].cardValue == cards[j].cardValue:
+                    return True
+        return False
 
     def isFlush(self, hand):
         cards = hand.getCards()
