@@ -1,5 +1,4 @@
 class Card():
-    __value = ''
     cardValue = ''
     cardSuit = ''
 
@@ -27,7 +26,6 @@ class Card():
         }
 
         if len(str(value)) == 2 and self.validate_first_char(value[0]) and self.validate_second_char(value[1]):
-            self.__value = value
             self.cardValue = switcher.get(value[0])
             self.cardSuit = value[1]
         else:
