@@ -95,10 +95,15 @@ class PokerHand():
     def isTwoPair(self, hand):
         cards = hand.getCards()
         firstPairValue = None
+        doQuit = False
         for i in range(0, len(cards)):
+            if doQuit:
+                break
             for j in range(1, len(cards)):
                 if cards[i].cardValue == cards[j].cardValue:
                     firstPairValue = cards[i].cardValue
+                    doQuit = True
+                    break
 
         for i in range(0, len(cards)):
             for j in range(1, len(cards)):
